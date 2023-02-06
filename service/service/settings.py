@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import redis
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'service.urls'
@@ -154,3 +156,15 @@ LOGGING={
     }
 
 CELERY_BROKER_URL= 'redis://redis:6379/0'
+
+RQ_QUEUES = {
+    'default': {
+         'HOST': 'localhost',
+         'PORT': '6379',
+         'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'),  # If you're
+         'DB': 0,
+         'DEFAULT_TIMEOUT': 480,
+     }
+}
+
+PRICE_CACHE_NAME = 'price_cache'
